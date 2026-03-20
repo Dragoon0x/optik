@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPTIK</title>
+<meta name="description" content="The Lighthouse for design quality. Paste code, get a score. 58 design intelligence commands for every AI coding tool.">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --text:#1a1a1a;--text-s:#666;--text-m:#999;--text-f:#bbb;
+  --bg:#fff;--bg-code:#1a1a1a;--bg-demo:#111;
+  --border:#e5e5e5;--border-l:#f0f0f0;
+  --accent:#e8590c;--green:#16a34a;--amber:#d97706;--red:#dc2626;
+  --green-bg:#f0fdf4;--red-bg:#fef2f2;
+  --mono:"SF Mono","Cascadia Mono","Fira Mono","Consolas",monospace;
+}
+html{font:17px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:var(--text);background:var(--bg)}
+body{padding:0 24px}
+::selection{background:var(--accent);color:#fff}
+a{color:var(--text);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--text-f);transition:text-decoration-color .15s}
+a:hover{text-decoration-color:var(--text)}
+.skip-link{position:absolute;top:-100px;left:16px;background:var(--text);color:#fff;padding:8px 16px;border-radius:4px;font-size:14px;z-index:100;text-decoration:none}
+.skip-link:focus{top:16px}
+.page{max-width:640px;margin:0 auto}
+nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0;font-size:14px;color:var(--text-m)}
+nav a{color:var(--text-m);text-decoration:none}
+nav a:hover{color:var(--text)}
+.hero{padding:80px 0 0}
+.hero-over{font-size:14px;color:var(--text-m);margin-bottom:4px}
+h1.title{font-size:42px;font-weight:700;letter-spacing:-.5px;line-height:1.15;margin-bottom:8px}
+.date{font-size:15px;color:var(--text-m);margin-bottom:40px}
+.intro{font-size:17px;line-height:1.7;margin-bottom:48px}
+.intro strong{font-weight:600}
+hr{border:none;border-top:1px solid var(--border);margin:64px 0}
+h1{font-size:32px;font-weight:700;letter-spacing:-.3px;line-height:1.2;margin-bottom:24px;margin-top:0}
+h2{font-size:22px;font-weight:600;letter-spacing:-.2px;line-height:1.3;margin-top:48px;margin-bottom:16px}
+h4{font-size:14px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.5px;margin-top:40px;margin-bottom:12px}
+p{margin-bottom:20px;line-height:1.7}
+code{font-family:var(--mono);font-size:.88em;background:#f5f5f5;padding:2px 6px;border-radius:4px}
+pre{background:var(--bg-code);color:#e5e5e5;padding:20px 24px;border-radius:12px;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.65;margin:24px 0}
+pre code{background:none;padding:0;font-size:inherit;color:inherit}
+.cc{color:#6a737d}.ck{color:#ff7b72}.cs{color:#a5d6ff}
+
+/* Analyzer */
+.az{background:var(--bg-demo);border-radius:12px;margin:24px 0;overflow:hidden}
+.az-chrome{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.az-dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.08)}
+.az-dot:nth-child(1){background:#ff5f57}.az-dot:nth-child(2){background:#febc2e}.az-dot:nth-child(3){background:#28c840}
+.az-tab{font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.3);margin-left:8px}
+.az-split{display:grid;grid-template-columns:1fr 320px;min-height:420px}
+.az-ed textarea{width:100%;height:100%;min-height:420px;background:0 0;border:none;outline:none;color:#d4d4d4;font-family:var(--mono);font-size:13px;line-height:1.7;padding:20px;resize:none;tab-size:2}
+.az-ed textarea::placeholder{color:rgba(255,255,255,.15)}
+.az-ed{border-right:1px solid rgba(255,255,255,.06)}
+.az-pn{padding:24px;display:flex;flex-direction:column;gap:20px;background:rgba(0,0,0,.2);color:#e5e5e5}
+
+.rw{display:flex;flex-direction:column;align-items:center;padding:8px 0}
+.ro{width:120px;height:120px;position:relative;margin-bottom:12px}
+.ro svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rt{fill:none;stroke:rgba(255,255,255,.06);stroke-width:7}
+.rf{fill:none;stroke-width:7;stroke-linecap:round;stroke:var(--text-f);transition:stroke-dashoffset 1s cubic-bezier(.16,1,.3,1),stroke .4s}
+.rl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rv{font-family:var(--mono);font-size:32px;font-weight:700;line-height:1;color:#e5e5e5}
+.rs{font-size:11px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+.rg{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+.cats{display:flex;flex-direction:column;gap:8px}
+.cr{display:grid;grid-template-columns:80px 1fr 28px;align-items:center;gap:8px}
+.cn{font-size:12px;color:rgba(255,255,255,.45);font-weight:500}
+.ct{height:5px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden}
+.cf{height:100%;border-radius:3px;width:0;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.cv{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.3);text-align:right}
+
+.iss{display:flex;flex-direction:column;gap:4px;max-height:140px;overflow-y:auto;font-size:12px;line-height:1.5}
+.iss::-webkit-scrollbar{width:4px}.iss::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.ii{display:flex;align-items:flex-start;gap:6px;padding:4px 6px;border-radius:4px;color:rgba(255,255,255,.5)}
+.ix{width:14px;height:14px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;margin-top:2px}
+.ie .ix{background:rgba(220,38,38,.2);color:#f87171}
+.iw .ix{background:rgba(217,119,6,.2);color:#fbbf24}
+.io .ix{background:rgba(22,163,74,.2);color:#4ade80}
+.ab{margin-top:auto;padding:10px;background:#fff;color:#111;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.ab:hover{opacity:.85}.ab:disabled{opacity:.3;cursor:default}
+
+.cap{font-size:14px;color:var(--text-m);line-height:1.5;margin:8px 0 24px}
+
+/* Before/After */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}
+.bac{border-radius:12px;overflow:hidden}
+.bah{padding:10px 16px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.bab .bah{background:var(--red-bg);color:var(--red)}.baa .bah{background:var(--green-bg);color:var(--green)}
+.bav{padding:16px;font-family:var(--mono);font-size:12.5px;line-height:1.65;background:#fafafa;min-height:120px}
+.bab .bad{color:var(--red);text-decoration:line-through;text-decoration-color:rgba(220,38,38,.3)}
+.baa .bag{color:var(--green)}
+
+/* Commands */
+.cg{display:flex;flex-direction:column;gap:2px;margin:12px 0 40px}
+.cw{display:grid;grid-template-columns:140px 1fr;gap:12px;padding:8px 0;font-size:15px;border-bottom:1px solid var(--border-l)}
+.cw:last-child{border-bottom:none}
+.cw code{font-family:var(--mono);font-size:14px;color:var(--accent);font-weight:500;background:none;padding:0}
+.cw span:last-child{color:var(--text-s);font-size:15px}
+
+/* Props table */
+.pt{width:100%;border-collapse:collapse;font-size:14px;margin:16px 0 32px}
+.pt th{text-align:left;font-weight:500;color:var(--text-m);font-size:12px;text-transform:uppercase;letter-spacing:.5px;padding:8px 0;border-bottom:1px solid var(--border)}
+.pt td{padding:10px 0;border-bottom:1px solid var(--border-l);vertical-align:top}
+.pt td:first-child{font-family:var(--mono);font-size:13px;font-weight:500;padding-right:16px;white-space:nowrap}
+.pt td:nth-child(2){color:var(--text-s);padding-right:16px}
+.pt td:nth-child(3){font-family:var(--mono);font-size:12px;color:var(--text-f)}
+
+/* Install */
+.ib{margin:24px 0}
+.il{font-size:13px;color:var(--text-m);margin-bottom:6px;font-weight:500}
+.ic{background:var(--bg-code);color:#e5e5e5;font-family:var(--mono);font-size:14px;padding:14px 20px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:opacity .15s;user-select:all}
+.ic:hover{opacity:.9}
+.ic .ch{font-size:11px;color:rgba(255,255,255,.2);user-select:none}
+
+.tr{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.tp{font-size:13px;color:var(--text-m);padding:4px 12px;border-radius:100px;border:1px solid var(--border)}
+
+/* Badge */
+.br{display:flex;align-items:center;gap:20px;padding:24px;background:#fafafa;border-radius:12px;margin:24px 0}
+.bc{font-family:var(--mono);font-size:12px;color:var(--text-m);word-break:break-all;cursor:pointer;line-height:1.5}
+.bc:hover{color:var(--text)}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--text);color:var(--bg);padding:8px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:1000;opacity:0;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .25s;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+@media(max-width:720px){
+  html{font-size:16px}h1.title{font-size:32px}h1{font-size:26px}
+  .az-split{grid-template-columns:1fr}.az-pn{border-top:1px solid rgba(255,255,255,.06)}
+  .ba{grid-template-columns:1fr}.cw{grid-template-columns:120px 1fr}
+  .br{flex-direction:column;gap:12px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media(prefers-color-scheme:dark){
+  :root{--text:#e5e5e5;--text-s:#999;--text-m:#666;--text-f:#444;--bg:#111;--bg-code:#0a0a0a;--bg-demo:#0a0a0a;--border:#222;--border-l:#1a1a1a;--accent:#f97316;--green-bg:#0a1a0f;--red-bg:#1a0a0a}
+  code{background:#1a1a1a}.bav{background:#0f0f0f}.br{background:#1a1a1a}
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div class="toast" id="toast"></div>
+<div class="page">
+<nav aria-label="Primary navigation"><a href="https://github.com/dragoon0x">Index</a></nav>
+
+<header class="hero">
+<div class="hero-over">##</div>
+<h1 class="title">OPTIK</h1>
+<p class="date">20 March, 2026</p>
+</header>
+
+<main id="main">
+<div class="intro">
+<p>OPTIK is a design quality engine for AI coding tools. One skill with 58 commands, a scoring algorithm, and an anti-pattern registry. It measures design quality across typography, color, layout, motion, and accessibility — then tells the AI exactly what to fix.</p>
+<p>I built this because every AI design skill I tried was just opinions in a markdown file. "Use good typography." "Pick a bold color." That's like telling a junior dev to "write clean code" and expecting production output. OPTIK gives the AI <strong>algorithms</strong>. Mathematical type scales. Computed color palettes. Grid-snapping logic. Measurable contrast ratios. A 0-100 score that means something.</p>
+<p>Paste code below and try it.</p>
+</div>
+
+<div class="az" id="analyzer">
+<div class="az-chrome"><div class="az-dot"></div><div class="az-dot"></div><div class="az-dot"></div><span class="az-tab">optik — design analyzer</span></div>
+<div class="az-split">
+<div class="az-ed"><textarea id="ci" spellcheck="false" placeholder="Paste HTML or CSS here..."></textarea></div>
+<div class="az-pn">
+<div class="rw">
+<div class="ro">
+<svg viewBox="0 0 120 120"><circle class="rt" cx="60" cy="60" r="52"/><circle class="rf" id="ra" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg>
+<div class="rl"><span class="rv" id="sv">—</span><span class="rs">score</span></div>
+</div>
+<div class="rg" id="sg">&nbsp;</div>
+</div>
+<div class="cats" id="cats">
+<div class="cr"><span class="cn">Typography</span><div class="ct"><div class="cf" id="b-ty"></div></div><span class="cv" id="v-ty">—</span></div>
+<div class="cr"><span class="cn">Color</span><div class="ct"><div class="cf" id="b-co"></div></div><span class="cv" id="v-co">—</span></div>
+<div class="cr"><span class="cn">Layout</span><div class="ct"><div class="cf" id="b-la"></div></div><span class="cv" id="v-la">—</span></div>
+<div class="cr"><span class="cn">Motion</span><div class="ct"><div class="cf" id="b-mo"></div></div><span class="cv" id="v-mo">—</span></div>
+<div class="cr"><span class="cn">Access.</span><div class="ct"><div class="cf" id="b-ac"></div></div><span class="cv" id="v-ac">—</span></div>
+</div>
+<div class="iss" id="iss"></div>
+<button class="ab" id="abtn" onclick="analyze()">Analyze</button>
+</div>
+</div>
+</div>
+
+<p class="cap">Paste any CSS or HTML. The engine checks 40+ signals across five categories and produces a weighted score. This is the same algorithm the AI runs when you use <code>/score</code>.</p>
+
+<p>The default sample scores around 38. That's typical AI-generated CSS: Inter font, purple gradient, nested cards, arbitrary spacing, no accessibility. The kind of output every LLM produces without guardrails.</p>
+
+<hr>
+
+<h1>What it catches</h1>
+
+<p>The engine checks specific, measurable signals. Not vibes. Each one maps to a point deduction in one of the five categories.</p>
+
+<h2>Typography</h2>
+
+<p>The number one tell of AI-generated UI is the font. Inter, Roboto, Open Sans, Poppins. OPTIK maintains a banlist of 14 overused fonts. Using any of them is an automatic -25 on the typography score.</p>
+
+<p>Beyond the banlist, the engine checks whether your font sizes follow a mathematical ratio. A good type scale uses a consistent multiplier between each step: 1.250 (major third), 1.333 (perfect fourth), 1.500 (perfect fifth). If your sizes are 32, 24, 18, 14 with no discernible ratio, the engine flags it.</p>
+
+<p>It also checks hierarchy depth (minimum 4 distinct sizes), line height ranges (1.5-1.7 for body, 1.1-1.3 for headings), letter-spacing on uppercase text, and font weight variety.</p>
+
+<div class="ba">
+<div class="bac bab">
+<div class="bah">Before</div>
+<div class="bav">
+font-family: <span class="bad">Inter, sans-serif</span>;<br>
+font-size: <span class="bad">32px</span>;<br>
+font-size: <span class="bad">24px</span>;<br>
+font-size: <span class="bad">18px</span>;<br>
+font-size: <span class="bad">14px</span>;<br>
+<span class="bad">/* no line-height */</span><br>
+<span class="bad">/* no letter-spacing */</span>
+</div>
+</div>
+<div class="bac baa">
+<div class="bah">After /type-set</div>
+<div class="bav">
+font-family: <span class="bag">"Outfit", sans-serif</span>;<br>
+--type-base: <span class="bag">17px</span>;<br>
+--type-md: <span class="bag">21px</span>; <span style="color:#999">/* x1.25 */</span><br>
+--type-lg: <span class="bag">27px</span>; <span style="color:#999">/* x1.25 */</span><br>
+--type-xl: <span class="bag">33px</span>; <span style="color:#999">/* x1.25 */</span><br>
+line-height: <span class="bag">1.6</span>;<br>
+letter-spacing: <span class="bag">-0.02em</span>;
+</div>
+</div>
+</div>
+<p class="cap">The /type-set command replaces the banned font, computes a Major Third scale (1.250), and adds line-height and letter-spacing in one pass.</p>
+
+<h2>Color</h2>
+
+<p>Purple gradient on a white background. The single most common pattern in AI-generated UI. OPTIK deducts 30 points for it. Harsh, but accurate. If your interface looks like every other AI landing page, the score should reflect that.</p>
+
+<p>The engine also flags: pure black text (#000 or #333 — always tint your darks), too many raw color values without CSS custom properties, palettes with more than 15 unique colors, and missing dark mode support.</p>
+
+<p>The <code>/palette</code> command generates a full 50-950 shade scale from a single hex value. <code>/semantic-color</code> builds surface, text, border, accent, and feedback tokens from that palette. <code>/dark-mode</code> creates a dark variant that preserves contrast ratios — not color inversion, actual dark surface design.</p>
+
+<div class="ba">
+<div class="bac bab">
+<div class="bah">Before</div>
+<div class="bav">
+background: <span class="bad">linear-gradient(</span><br>
+&nbsp;&nbsp;<span class="bad">135deg, #667eea, #764ba2</span><br>
+<span class="bad">)</span>;<br>
+color: <span class="bad">#333</span>;<br>
+border: <span class="bad">1px solid #eee</span>;<br>
+<span class="bad">/* 12 raw hex values */</span><br>
+<span class="bad">/* no CSS variables */</span>
+</div>
+</div>
+<div class="bac baa">
+<div class="bah">After /palette #e8590c</div>
+<div class="bav">
+--color-50: <span class="bag">#fff7ed</span>;<br>
+--color-500: <span class="bag">#e8590c</span>;<br>
+--color-900: <span class="bag">#431407</span>;<br>
+--surface: <span class="bag">var(--color-50)</span>;<br>
+--text: <span class="bag">var(--color-900)</span>;<br>
+--accent: <span class="bag">var(--color-500)</span>;<br>
+<span class="bag">/* 11 shades, full system */</span>
+</div>
+</div>
+</div>
+<p class="cap">One hex in, a complete color system out. The /palette command generates 11 perceptually uniform shades and the /semantic-color command maps them to surface, text, border, and accent tokens.</p>
+
+<h2>Layout</h2>
+
+<p>Cards inside cards. The other dead giveaway. OPTIK deducts 20 points for nested cards because it's almost always the AI defaulting to container patterns without thinking about hierarchy.</p>
+
+<p>The engine checks whether spacing values sit on a 4px grid. Every padding, margin, and gap should be divisible by 4. Values like 13px, 22px, 37px suggest arbitrary choices. <code>/grid</code> snaps them to the nearest valid value.</p>
+
+<p>It also verifies max-width constraints on content containers, responsive breakpoints, grid/flexbox usage, gap property adoption, and nesting depth (maximum 4 levels).</p>
+
+<h2>Motion</h2>
+
+<p>Motion scoring starts at 50, not 100. A page with zero animation isn't broken — it's just not investing in that axis. You earn points by adding purposeful transitions, custom easing curves, scroll reveals, and keyframe animations. You lose points for animating layout properties instead of transforms, or for having motion without a <code>prefers-reduced-motion</code> fallback.</p>
+
+<h2>Accessibility</h2>
+
+<p>The harshest single penalty in the engine: <code>outline: none</code> without a replacement focus style. That's -20 points. Removing focus outlines makes keyboard navigation impossible.</p>
+
+<p>The engine checks for <code>:focus-visible</code> styles on interactive elements, semantic HTML landmarks, ARIA attributes, touch target sizing (44x44px minimum), and skip links.</p>
+
+<hr>
+
+<h1>Getting started</h1>
+
+<div class="ib">
+<div class="il">All tools</div>
+<div class="ic" onclick="cp('npx skills add dragoon0x/optik')"><span>npx skills add dragoon0x/optik</span><span class="ch">click to copy</span></div>
+</div>
+
+<p>Auto-detects your AI harness and installs to the right location.</p>
+
+<div class="tr">
+<span class="tp">Claude Code</span><span class="tp">Cursor</span><span class="tp">Gemini CLI</span><span class="tp">Codex CLI</span><span class="tp">Copilot</span><span class="tp">Kiro</span><span class="tp">OpenCode</span><span class="tp">Antigravity</span>
+</div>
+
+<div class="ib">
+<div class="il">Claude Code plugin</div>
+<div class="ic" onclick="cp('/plugin marketplace add dragoon0x/optik')"><span>/plugin marketplace add dragoon0x/optik</span><span class="ch">click to copy</span></div>
+</div>
+
+<div class="ib">
+<div class="il">Manual</div>
+<div class="ic" onclick="cp('git clone https://github.com/dragoon0x/optik.git')"><span>git clone https://github.com/dragoon0x/optik.git</span><span class="ch">click to copy</span></div>
+</div>
+
+<p>For manual install, copy the provider directory to your project root:</p>
+
+<pre><code>cp -r optik/.claude your-project/     <span class="cc"># Claude Code</span>
+cp -r optik/.cursor your-project/     <span class="cc"># Cursor</span>
+cp -r optik/.agents your-project/     <span class="cc"># Copilot / Kiro / Antigravity</span>
+cp -r optik/.gemini your-project/     <span class="cc"># Gemini CLI</span>
+cp -r optik/.codex  your-project/     <span class="cc"># Codex CLI</span></code></pre>
+
+<hr>
+
+<h1>58 commands</h1>
+
+<p>Not design vocabulary lessons. Each command carries the full scoring algorithm, anti-pattern registry, and generation logic. When the AI runs <code>/palette</code>, it doesn't ask an LLM what a good palette looks like. It computes one from HSL interpolation.</p>
+
+<h2>Score & Audit</h2>
+<div class="cg">
+<div class="cw"><code>/score</code><span>Full 0-100 design quality analysis</span></div>
+<div class="cw"><code>/audit</code><span>Comprehensive report with line references</span></div>
+<div class="cw"><code>/critique</code><span>UX hierarchy and resonance review</span></div>
+<div class="cw"><code>/benchmark</code><span>Compare against quality baselines</span></div>
+<div class="cw"><code>/compare</code><span>Side-by-side version comparison</span></div>
+<div class="cw"><code>/report</code><span>Shareable score card</span></div>
+<div class="cw"><code>/trend</code><span>Track score across iterations</span></div>
+<div class="cw"><code>/certify</code><span>Pass/fail for CI/CD pipelines</span></div>
+</div>
+
+<p><code>/score</code> is the one you'll use most. It runs the full analysis and returns a categorized breakdown. <code>/certify</code> is the same engine in pass/fail mode — set a threshold (default 80), get a boolean. Wire it into your pre-commit hook.</p>
+
+<h2>Typography</h2>
+<div class="cg">
+<div class="cw"><code>/type-scale</code><span>Generate mathematical scale from base + ratio</span></div>
+<div class="cw"><code>/type-pair</code><span>Font pairing recommendations</span></div>
+<div class="cw"><code>/type-audit</code><span>Audit all font usage across codebase</span></div>
+<div class="cw"><code>/type-fix</code><span>Auto-fix scale inconsistencies</span></div>
+<div class="cw"><code>/type-hierarchy</code><span>Enforce heading + body hierarchy</span></div>
+<div class="cw"><code>/type-measure</code><span>Check line lengths (45-75 chars)</span></div>
+<div class="cw"><code>/type-rhythm</code><span>Vertical rhythm baseline alignment</span></div>
+<div class="cw"><code>/type-set</code><span>Complete type system in one pass</span></div>
+</div>
+
+<p><code>/type-scale</code> takes a base size and a ratio. Major Third (1.250) is the default. It computes 7 stops, rounds to whole pixels, and outputs CSS custom properties. <code>/type-pair</code> never suggests banned fonts.</p>
+
+<h2>Color</h2>
+<div class="cg">
+<div class="cw"><code>/palette</code><span>Full 50-950 shade palette from one hex</span></div>
+<div class="cw"><code>/contrast</code><span>WCAG AA/AAA contrast check</span></div>
+<div class="cw"><code>/harmonize</code><span>Fix palette coherence</span></div>
+<div class="cw"><code>/semantic-color</code><span>Surface, text, border, accent tokens</span></div>
+<div class="cw"><code>/dark-mode</code><span>Dark variant preserving contrast</span></div>
+<div class="cw"><code>/color-audit</code><span>Map all colors, find duplicates</span></div>
+<div class="cw"><code>/color-fix</code><span>Auto-fix contrast failures</span></div>
+<div class="cw"><code>/color-a11y</code><span>Verify palette at every text size</span></div>
+</div>
+
+<h2>Layout</h2>
+<div class="cg">
+<div class="cw"><code>/grid</code><span>8px grid with snap correction</span></div>
+<div class="cw"><code>/spacing</code><span>Generate spacing scale from base unit</span></div>
+<div class="cw"><code>/density</code><span>Visual density and whitespace audit</span></div>
+<div class="cw"><code>/rhythm</code><span>Vertical spacing rhythm</span></div>
+<div class="cw"><code>/responsive</code><span>Breakpoint and reflow quality check</span></div>
+<div class="cw"><code>/layout-audit</code><span>Map patterns and find issues</span></div>
+<div class="cw"><code>/layout-fix</code><span>Auto-fix off-grid spacing</span></div>
+<div class="cw"><code>/align</code><span>Alignment verification across sections</span></div>
+</div>
+
+<h2>Motion</h2>
+<div class="cg">
+<div class="cw"><code>/animate</code><span>Purposeful motion and transitions</span></div>
+<div class="cw"><code>/transition</code><span>Timing function audit and improvement</span></div>
+<div class="cw"><code>/scroll-fx</code><span>Scroll-triggered reveals and parallax</span></div>
+<div class="cw"><code>/motion-audit</code><span>Purpose, performance, and a11y check</span></div>
+<div class="cw"><code>/reduce-motion</code><span>Add prefers-reduced-motion support</span></div>
+<div class="cw"><code>/overdrive</code><span>WebGL, spring physics, GPU effects</span></div>
+</div>
+
+<p><code>/overdrive</code> is for when the brief demands something technically extraordinary. Shaders, spring physics on dialogs, scroll-driven 3D transforms. Maximum one per page. Must degrade gracefully.</p>
+
+<h2>Accessibility</h2>
+<div class="cg">
+<div class="cw"><code>/a11y-audit</code><span>Full accessibility check</span></div>
+<div class="cw"><code>/focus</code><span>Focus ring system generation</span></div>
+<div class="cw"><code>/touch-target</code><span>44x44px minimum verification</span></div>
+<div class="cw"><code>/aria</code><span>ARIA attribute audit and fix</span></div>
+<div class="cw"><code>/a11y-fix</code><span>Auto-fix detectable issues</span></div>
+<div class="cw"><code>/screen-reader</code><span>Simulated screen reader traversal</span></div>
+</div>
+
+<h2>Design System</h2>
+<div class="cg">
+<div class="cw"><code>/tokens</code><span>Complete design token set</span></div>
+<div class="cw"><code>/extract</code><span>Pull reusable patterns from code</span></div>
+<div class="cw"><code>/normalize</code><span>Align to design system standards</span></div>
+<div class="cw"><code>/system-audit</code><span>Check for token drift</span></div>
+<div class="cw"><code>/component-check</code><span>Verify component consistency</span></div>
+<div class="cw"><code>/export-css</code><span>CSS custom properties</span></div>
+<div class="cw"><code>/export-tailwind</code><span>Tailwind config</span></div>
+<div class="cw"><code>/export-json</code><span>W3C Design Tokens JSON</span></div>
+</div>
+
+<p><code>/tokens</code> is the one-shot design system generator. It runs <code>/palette</code>, <code>/type-scale</code>, <code>/spacing</code>, and the shadow and radius generators, then outputs everything in four formats simultaneously.</p>
+
+<h2>Polish</h2>
+<div class="cg">
+<div class="cw"><code>/polish</code><span>Final pass — alignment, spacing, details</span></div>
+<div class="cw"><code>/distill</code><span>Strip to essence, remove complexity</span></div>
+<div class="cw"><code>/bolder</code><span>Amplify safe, boring designs</span></div>
+<div class="cw"><code>/quieter</code><span>Tone down aggressive designs</span></div>
+<div class="cw"><code>/harden</code><span>Error handling, i18n, edge cases</span></div>
+<div class="cw"><code>/delight</code><span>Memorable moments of joy</span></div>
+</div>
+
+<p><code>/bolder</code> and <code>/quieter</code> are opposites. One amplifies safe designs that score fine but feel forgettable. The other dials back aggressive designs with too much competing for attention.</p>
+
+<hr>
+
+<h1>Scoring</h1>
+
+<p>The five categories are weighted to reflect their impact on perceived quality:</p>
+
+<table class="pt">
+<thead><tr><th>Category</th><th>Weight</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Typography</td><td>25%</td><td>Most visible quality signal</td></tr>
+<tr><td>Color</td><td>25%</td><td>Immediate emotional impact</td></tr>
+<tr><td>Layout</td><td>25%</td><td>Structural foundation</td></tr>
+<tr><td>Motion</td><td>10%</td><td>Enhancement, not requirement</td></tr>
+<tr><td>Accessibility</td><td>15%</td><td>Non-negotiable baseline</td></tr>
+</tbody>
+</table>
+
+<h2>Thresholds</h2>
+
+<table class="pt">
+<thead><tr><th>Score</th><th>Grade</th><th></th></tr></thead>
+<tbody>
+<tr><td>90-100</td><td>Exceptional</td><td>Ship with confidence</td></tr>
+<tr><td>80-89</td><td>Strong</td><td>Minor refinements only</td></tr>
+<tr><td>65-79</td><td>Needs work</td><td>Fix before shipping</td></tr>
+<tr><td>40-64</td><td>AI slop</td><td>Significant rework</td></tr>
+<tr><td>0-39</td><td>Emergency</td><td>Start over with intention</td></tr>
+</tbody>
+</table>
+
+<p>The default target is 80. The AI won't ship code below 65 without explicit override.</p>
+
+<hr>
+
+<h1>Anti-pattern registry</h1>
+
+<p>Automatically flagged. Each one has a specific deduction and a specific fix.</p>
+
+<table class="pt">
+<thead><tr><th>Pattern</th><th>Deduction</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td>Inter / Roboto / Arial</td><td>-25 type</td><td>Distinctive typeface</td></tr>
+<tr><td>Purple gradient</td><td>-30 color</td><td>Non-generic palette</td></tr>
+<tr><td>Nested cards</td><td>-20 layout</td><td>Flatten hierarchy</td></tr>
+<tr><td>No CSS variables</td><td>-15 color</td><td>Use custom properties</td></tr>
+<tr><td>outline:none</td><td>-20 a11y</td><td>:focus-visible styles</td></tr>
+<tr><td>No media queries</td><td>-15 layout</td><td>Add breakpoints</td></tr>
+<tr><td>Pure black text</td><td>-5 color</td><td>Tint dark colors</td></tr>
+<tr><td>Off-grid spacing</td><td>-3 each</td><td>Snap to 4px grid</td></tr>
+<tr><td>Single font weight</td><td>-10 type</td><td>Use 2-4 weights</td></tr>
+<tr><td>No line-height</td><td>-10 type</td><td>Add declarations</td></tr>
+<tr><td>15+ unique colors</td><td>-15 color</td><td>Consolidate to tokens</td></tr>
+<tr><td>Motion without a11y</td><td>-10 motion</td><td>prefers-reduced-motion</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h1>Badge</h1>
+
+<p>Add your score to your README.</p>
+
+<div class="br">
+<svg width="150" height="26" viewBox="0 0 150 26" xmlns="http://www.w3.org/2000/svg"><rect width="72" height="26" rx="4" fill="#555"/><rect x="72" width="78" height="26" rx="4" fill="#16a34a"/><rect x="68" width="8" height="26" fill="#555"/><rect x="72" width="4" height="26" fill="#16a34a"/><text x="36" y="17" text-anchor="middle" fill="#fff" font-family="monospace" font-size="11" font-weight="600">OPTIK</text><text x="111" y="17" text-anchor="middle" fill="#fff" font-family="monospace" font-size="11" font-weight="600">92 / 100</text></svg>
+<div class="bc" onclick="cp('![OPTIK](https://optik.style/badge/YOUR-REPO)')">![OPTIK](https://optik.style/badge/YOUR-REPO)</div>
+</div>
+
+<hr>
+
+<h1>How it works</h1>
+
+<p>One core skill file contains the scoring algorithm, type scale math, palette generation logic, spacing grid rules, and the anti-pattern registry. 58 command skills reference it. When the AI runs <code>/score</code>, it doesn't send your code to an API. It parses the CSS in context and runs the scoring logic inline.</p>
+
+<p>The build script compiles source skills to five provider directories: <code>.claude/</code>, <code>.cursor/</code>, <code>.agents/</code>, <code>.gemini/</code>, and <code>.codex/</code>. Each is identical except for minor frontmatter differences. <code>npx skills add</code> auto-detects your provider.</p>
+
+<p>The web analyzer above runs a JavaScript port of the same logic. It's client-side only. Your code never leaves the browser.</p>
+
+<hr>
+
+<h1>Just a score</h1>
+
+<p>OPTIK can do a lot. Palette generation, type scale computation, grid snapping, dark mode derivation, token export in four formats. But if you just want to know whether your UI is any good before you ship it, <code>/score</code> does that just fine too.</p>
+
+<hr>
+
+<p style="color:var(--text-m);font-size:15px;padding:24px 0 60px">Built by <a href="https://github.com/dragoon0x">dragoon0x</a>. Apache 2.0. <a href="https://github.com/dragoon0x/optik">Source on GitHub</a>.</p>
+
+</main>
+</div>
+
+<script>
+const BN=['inter','roboto','arial','helvetica','system-ui','-apple-system','open sans','lato','montserrat','poppins','nunito','space grotesk','raleway','source sans pro'];
+const PR=/linear-gradient\s*\([^)]*(?:#667eea|#764ba2|#6366f1|#8b5cf6|#7c3aed|#a855f7|purple)/i;
+const NR=/\.card\s+\.(?:card|inner[-_]?card)/i;
+
+function analyze(){
+  const code=document.getElementById('ci').value;
+  if(!code.trim()){toast('Paste some code first');return}
+  const b=document.getElementById('abtn');b.disabled=true;b.textContent='Analyzing\u2026';
+  rst();
+  setTimeout(()=>{const r=run(code);anim(r.overall,1e3);
+    const g=grd(r.overall);setTimeout(()=>{document.getElementById('sg').textContent=g.t;document.getElementById('sg').style.color=g.c},700);
+    ['ty','co','la','mo','ac'].forEach((c,i)=>{setTimeout(()=>{const s=r.cat[c],cl=sc(s);
+      document.getElementById('b-'+c).style.width=s+'%';document.getElementById('b-'+c).style.background=cl;
+      document.getElementById('v-'+c).textContent=s;document.getElementById('v-'+c).style.color=cl},300+i*120)});
+    setTimeout(()=>{const el=document.getElementById('iss');r.iss.forEach((x,i)=>{setTimeout(()=>{const d=document.createElement('div');
+      d.className='ii i'+(x.t==='error'?'e':x.t==='warn'?'w':'o');
+      d.innerHTML=`<span class="ix">${x.t==='error'?'\u2715':x.t==='warn'?'!':'\u2713'}</span><span>${x.m}</span>`;el.appendChild(d)},i*60)})},500);
+    b.disabled=false;b.textContent='Re-analyze'},300)}
+
+function rst(){document.getElementById('sv').textContent='\u2014';document.getElementById('sg').innerHTML='&nbsp;';document.getElementById('iss').innerHTML='';
+  ['ty','co','la','mo','ac'].forEach(c=>{document.getElementById('b-'+c).style.width='0';document.getElementById('v-'+c).textContent='\u2014';document.getElementById('v-'+c).style.color=''});
+  const a=document.getElementById('ra');a.style.strokeDashoffset='326.73';a.style.stroke='var(--text-f)'}
+
+function run(code){const I=[],lo=code.toLowerCase();let ty=100,co=100,la=100,mo=50,ac=100;
+  // Typo
+  const ff=code.match(/font-family\s*:\s*([^;]+)/gi)||[];let bf=false,gf=false;
+  ff.forEach(f=>{const v=f.toLowerCase();BN.forEach(b=>{if(v.includes(b)){bf=true;I.push({t:'warn',m:'Banned font: '+b})}});if(!BN.some(b=>v.includes(b)))gf=true});
+  if(bf)ty-=25;if(gf)ty+=5;
+  const sz=[];(code.match(/font-size\s*:\s*(\d+(?:\.\d+)?)\s*(px|rem|em)/gi)||[]).forEach(m=>{const v=parseFloat(m.match(/(\d+(?:\.\d+)?)/)[1]);const u=m.match(/(px|rem|em)/i)[1];sz.push(u==='px'?v:v*16)});
+  if(sz.length>=3){const s=[...new Set(sz)].sort((a,b)=>b-a);if(s.length>=3){const r=[];for(let i=0;i<s.length-1;i++)r.push(s[i]/s[i+1]);const a=r.reduce((a,b)=>a+b,0)/r.length;const v=r.reduce((a,b)=>a+Math.pow(b-a,2),0)/r.length;if(v>.15){ty-=15;I.push({t:'warn',m:'Inconsistent type scale (var '+v.toFixed(2)+')'})}else I.push({t:'ok',m:'Type scale ratio \u2248 '+a.toFixed(2)})}}else if(sz.length>0){ty-=10;I.push({t:'warn',m:'Shallow type hierarchy'})}
+  if(!(code.match(/line-height/gi)||[]).length&&code.length>200){ty-=10;I.push({t:'warn',m:'No line-height'})}
+  if((code.match(/letter-spacing/gi)||[]).length)ty+=5;
+  const wt=[...new Set((code.match(/font-weight\s*:\s*(\d+|bold|normal|light)/gi)||[]).map(w=>w.toLowerCase()))];
+  if(wt.length<2&&code.length>200){ty-=10;I.push({t:'warn',m:'Single font weight'})}
+  ty=cl(ty);
+  // Color
+  if(PR.test(code)){co-=30;I.push({t:'error',m:'Purple gradient detected'})}
+  const hx=code.match(/#[0-9a-fA-F]{3,8}/g)||[];const rg=code.match(/rgba?\s*\([^)]+\)/gi)||[];
+  const aC=[...new Set([...hx.map(c=>c.toLowerCase()),...rg.map(c=>c.toLowerCase())])];
+  if(aC.length<3&&code.length>200){co-=10;I.push({t:'warn',m:'Limited palette'})}else if(aC.length>15){co-=15;I.push({t:'warn',m:aC.length+' unique colors'})}
+  const vr=code.match(/var\s*\(\s*--[^)]+\)/g)||[];
+  if(!vr.length&&aC.length>3){co-=15;I.push({t:'warn',m:'No CSS custom properties'})}else if(vr.length)I.push({t:'ok',m:vr.length+' CSS variables'});
+  if(lo.includes('prefers-color-scheme')){co+=10;I.push({t:'ok',m:'Dark mode support'})}
+  if(code.includes('color: #000')||code.includes('color: black')||code.includes('color: #333')){co-=5;I.push({t:'warn',m:'Pure black text'})}
+  co=cl(co);
+  // Layout
+  if(NR.test(code)){la-=20;I.push({t:'error',m:'Nested cards'})}
+  const hG=lo.includes('display: grid')||lo.includes('display:grid');const hF=lo.includes('display: flex')||lo.includes('display:flex');
+  if(!hG&&!hF&&code.length>200){la-=20;I.push({t:'warn',m:'No Grid or Flexbox'})}
+  if(hG)I.push({t:'ok',m:'CSS Grid'});if(hF&&!hG)I.push({t:'ok',m:'Flexbox'});
+  const sp=[...(code.match(/(?:padding|margin|gap)\s*:\s*(\d+)px/g)||[])].map(s=>parseInt(s.match(/(\d+)/)[1]));
+  const og=sp.filter(v=>v%4!==0);if(og.length&&sp.length>2){la-=Math.min(15,og.length*3);I.push({t:'warn',m:og.length+' off-grid values'})}
+  if(!(code.match(/@media/gi)||[]).length&&code.length>300){la-=15;I.push({t:'warn',m:'No media queries'})}
+  if(!lo.includes('max-width')&&code.length>300){la-=10;I.push({t:'warn',m:'No max-width'})}
+  if(lo.includes('gap:'))I.push({t:'ok',m:'Using gap'});
+  la=cl(la);
+  // Motion
+  const tr=(code.match(/transition\s*:/gi)||[]).length;const kf=(code.match(/@keyframes/gi)||[]).length;const tf=(code.match(/transform\s*:/gi)||[]).length;
+  if(tr)mo+=15;if(kf)mo+=15;if(tf)mo+=10;
+  if(lo.includes('cubic-bezier')){mo+=10;I.push({t:'ok',m:'Custom easing'})}
+  if(lo.includes('prefers-reduced-motion')){mo+=10;I.push({t:'ok',m:'prefers-reduced-motion'})}else if(tr||kf){mo-=10;I.push({t:'warn',m:'Motion without reduced-motion'})}
+  if(tr)I.push({t:'ok',m:tr+' transition(s)'});mo=cl(mo);
+  // A11y
+  if(lo.includes(':focus')||lo.includes(':focus-visible'))I.push({t:'ok',m:'Focus styles'});else if(code.length>200){ac-=15;I.push({t:'warn',m:'No focus styles'})}
+  const sm=['<header','<main','<nav','<section','<article','<footer'];
+  if(sm.some(t=>lo.includes(t)))I.push({t:'ok',m:'Semantic HTML'});else if(lo.includes('<div')&&code.length>200){ac-=10;I.push({t:'warn',m:'Only divs'})}
+  if(lo.includes('aria-'))ac+=5;if(lo.includes('skip')&&lo.includes('link')){ac+=5;I.push({t:'ok',m:'Skip link'})}
+  if(lo.includes('outline: none')||lo.includes('outline:none')||lo.includes('outline: 0')){ac-=20;I.push({t:'error',m:'outline:none without replacement'})}
+  ac=cl(ac);
+  const ov=Math.round(ty*.25+co*.25+la*.25+mo*.1+ac*.15);
+  return{overall:ov,cat:{ty,co,la,mo,ac},iss:I.sort((a,b)=>{const o={error:0,warn:1,ok:2};return o[a.t]-o[b.t]})}}
+
+function cl(v){return Math.max(0,Math.min(100,v))}
+function sc(s){return s>=80?'#16a34a':s>=50?'#d97706':'#dc2626'}
+function grd(s){if(s>=90)return{t:'Exceptional',c:'#16a34a'};if(s>=80)return{t:'Strong',c:'#16a34a'};if(s>=65)return{t:'Needs work',c:'#d97706'};if(s>=40)return{t:'AI slop detected',c:'#d97706'};return{t:'Design emergency',c:'#dc2626'}}
+function anim(tgt,dur){const el=document.getElementById('sv'),arc=document.getElementById('ra'),ci=2*Math.PI*52,st=performance.now();
+  !function f(now){const p=Math.min((now-st)/dur,1),e=1-Math.pow(1-p,3),c=Math.round(tgt*e);el.textContent=c;arc.style.strokeDashoffset=ci-(ci*(c/100));arc.style.stroke=sc(c);if(p<1)requestAnimationFrame(f)}(st)}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2e3)}
+function cp(t){navigator.clipboard.writeText(t).then(()=>toast('Copied'))}
+
+window.addEventListener('load',()=>{document.getElementById('ci').value=`.hero {
+  font-family: Inter, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding: 20px;
+  color: #333;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card .inner-card {
+  background: #f9f9f9;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+h1 { font-size: 32px; }
+h2 { font-size: 24px; }
+h3 { font-size: 18px; }
+p  { font-size: 14px; color: #000; }
+
+.btn {
+  background: #667eea;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+}`;setTimeout(analyze,600)})
+</script>
+</body>
+</html>
