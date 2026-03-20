@@ -1,5 +1,8 @@
 # OPTIK
 
+> **Experimental** · Built out of curiosity · Educational purposes · DYOR
+
+
 **Measure design quality. Don't guess.**
 
 The Lighthouse for design quality. 58 design intelligence commands with scoring algorithms, mathematical type scales, color palette generation, and anti-pattern detection.
@@ -183,3 +186,13 @@ The core design intelligence skill builds on concepts from Anthropic's official 
 ---
 
 Built by [dragoon0x](https://github.com/dragoon0x)
+
+---
+
+## Disclaimer
+
+**This project is experimental software, built out of curiosity and shared for educational purposes only.**
+
+This software is provided "AS IS" without warranty of any kind. The author makes no claims about the accuracy or reliability of design analysis, scoring, or recommendations. Design quality is subjective — scores are heuristic approximations, not definitive assessments. This is not a substitute for professional design review or accessibility auditing. Not affiliated with Anthropic, Cursor, Google, OpenAI, GitHub, Vercel, or any AI tool vendor.
+
+**DYOR — Do Your Own Research.** See [DISCLAIMER.md](DISCLAIMER.md) for full terms.
